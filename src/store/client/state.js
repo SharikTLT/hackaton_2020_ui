@@ -1,7 +1,7 @@
 export default function () {
   return {
     activeCall: false,
-    apiToken: null,
+    apiToken: localStorage.getItem('apiToken') || null,
     name: null
   }
 }

@@ -26,5 +26,37 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  Router.beforeEach((to, from, next) => {
+    try {
+      const isPublic = to.matched.some(record => record.meta.public)
+      const onlyWhenLoggedOut = to.matched.some(record => record.meta.onlyWhenLoggedOut)
+      const token = localStorage.getItem('apiToken')
+      const loggedIn = token !== undefined && token !== null
+
+      if (to.path === '/') {
+        console.log('to app')
+        return next('/app')
+      }
+
+      if (!isPublic && !loggedIn) {
+        console.log('to login')
+        return next({
+          path: '/login',
+          query: { redirect: to.fullPath }// Store the full path to redirect the user to after login
+        })
+      }
+      // Do not allow user to visit login page or register page if they are logged in
+      if (loggedIn && onlyWhenLoggedOut) {
+        console.log('logged move to root')
+        return next('/app')
+      }
+      console.log('ok next route')
+      return next()
+    } catch (e) {
+      console.log('Error on route', e)
+    }
+  })
+
+  window.$$router = Router
   return Router
 }
