@@ -19,9 +19,10 @@ export default async ({ router, Vue, redirect, store }) => {
   api.defaults.timeout = 10000
   api.interceptors.request.use(
     config => {
-      const token = store.getters['client/token']
+      const token = localStorage.getItem('apiToken')
+      console.log('intercept with ', token)
       if (token) {
-        config.headers.common.Authorization = token
+        config.headers.common['Api-Token'] = token
       }
       return config
     },

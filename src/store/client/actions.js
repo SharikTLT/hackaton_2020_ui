@@ -16,14 +16,16 @@ export const callLogin = ({ commit, state, dispatch, store, Vue }, payload) => {
   }).finally(() => {
     commit('endCall')
   })
-/* ,
-    response => {
-      commit('authorized', response.data.payload)
-    },
-    (er) => {
+}
 
-    },
-    () => {
-      commit('endCall')
-    } */
+export const loadModules = ({ commit }) => {
+  window.$$store.$api.get('user/modules')
+    .then(res => {
+      commit('modulesLoaded', res.data.payload)
+    })
+}
+
+export const logout = ({ commit }) => {
+  localStorage.removeItem('apiToken')
+  window.$$router.go('/')
 }

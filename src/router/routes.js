@@ -11,11 +11,24 @@ const routes = [
       onlyWhenLoggedOut: true
     }
   },
+  // {
+  //   path: '/app/order',
+  //   component: () => import('layouts/MainLayout.vue'),
+  //   children: [
+  //     { path: '/create', component: () => import('pages/CreateOrder.vue') }
+  //   ],
+  //   meta: {
+  //     public: false,
+  //     onlyWhenLoggedOut: false
+  //   }
+  // },
   {
     path: '/app',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/App.vue') }
+      { path: '', component: () => import('pages/App.vue') },
+      { path: 'order/view/:id', component: () => import('pages/App.vue') },
+      { path: 'order/create', component: () => import('pages/CreateOrder.vue') }
     ],
     meta: {
       public: false,

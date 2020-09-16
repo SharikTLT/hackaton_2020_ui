@@ -15,3 +15,7 @@ export function startCall (state) {
 export function endCall (state) {
   state.activeCall = false
 }
+
+export function modulesLoaded (state, modules) {
+  state.modules = modules.availableModules
+}
