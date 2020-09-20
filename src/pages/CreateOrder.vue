@@ -66,10 +66,11 @@
         :header-nav="true"
       >
         <p>
-          Загрузите сканы оригиналов документов.
+         Приложите сканы оригиналов документов.
         </p>
+        <FilesUploader :bus="bus" :package="currentFilePack"/>
         <q-stepper-navigation>
-          <q-btn @click="step = 3" color="primary" label="Продолжить" />
+          <q-btn :disable="filesSelected" @click="initUpload()" color="primary" label="Продолжить" />
           <q-btn
             flat
             @click="step = 1"
@@ -108,11 +109,14 @@
 <script>
 import title from './title'
 import BreadcrumbsTpl from 'components/BreadcrumbsTpl.vue'
+import FilesUploader from 'components/FilesUploader.vue'
+import Vue from 'vue'
 
 export default {
   name: 'CreateOrder',
   components: {
-    BreadcrumbsTpl
+    BreadcrumbsTpl,
+    FilesUploader
   },
   meta: {
     title: title('Создание заявки')
@@ -129,12 +133,33 @@ export default {
     },
     price: function () {
       return this.languageSelected ? this.pages * (this.languageFrom.price + this.languageTo.price) : 0
+    },
+    currentFilePack: function () {
+      const pack = this.$store.getters['attachment/getCurrentPack']
+      if (pack.state === 'READY') {
+        this.filesUploaded()
+      }
+      return pack
+    },
+    filesSelected: function () {
+      return this.$store.getters['attachment/getCurrentPack'].files.length === 0
     }
   },
   data: function () {
+    const bus = new Vue()
     return {
-      languageFrom: null,
-      languageTo: null,
+      bus,
+      packageId: null,
+      languageFrom: {
+        title: 'Английский',
+        code: 'eng',
+        price: 50
+      },
+      languageTo: {
+        title: 'Русский',
+        code: 'rus',
+        price: 40
+      },
       step: 1,
       pages: 1,
       payed: false,
@@ -173,6 +198,17 @@ export default {
       return lang != null
         ? lang.title
         : fallback
+    },
+    filesUploaded: function () {
+      this.step = 3
+      console.log('files uploaded triggered')
+    },
+    initUpload: function () {
+      if (this.currentFilePack.step !== 'ready') {
+        this.bus.$emit('uploadFiles')
+      } else {
+        this.filesUploaded()
+      }
     }
   }
 }

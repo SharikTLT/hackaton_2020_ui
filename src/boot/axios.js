@@ -20,7 +20,6 @@ export default async ({ router, Vue, redirect, store }) => {
   api.interceptors.request.use(
     config => {
       const token = localStorage.getItem('apiToken')
-      console.log('intercept with ', token)
       if (token) {
         config.headers.common['Api-Token'] = token
       }

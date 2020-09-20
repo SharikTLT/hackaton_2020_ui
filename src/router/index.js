@@ -34,12 +34,10 @@ export default function (/* { store, ssrContext } */) {
       const loggedIn = token !== undefined && token !== null
 
       if (to.path === '/') {
-        console.log('to app')
         return next('/app')
       }
 
       if (!isPublic && !loggedIn) {
-        console.log('to login')
         return next({
           path: '/login',
           query: { redirect: to.fullPath }// Store the full path to redirect the user to after login
@@ -47,10 +45,8 @@ export default function (/* { store, ssrContext } */) {
       }
       // Do not allow user to visit login page or register page if they are logged in
       if (loggedIn && onlyWhenLoggedOut) {
-        console.log('logged move to root')
         return next('/app')
       }
-      console.log('ok next route')
       return next()
     } catch (e) {
       console.log('Error on route', e)
