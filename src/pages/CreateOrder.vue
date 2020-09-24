@@ -84,7 +84,7 @@
       <q-step :name="3" title="Оплата" icon="attach_money" :done="step > 3" :disable="payed" :header-nav="true">
         <h5 v-if="languageSelected">Стоимость перевода: {{ price }} руб.</h5>
         <q-stepper-navigation>
-          <q-btn @click="step = 4; payed = true" color="primary" label="Оплата"  />
+          <q-btn :disable="isSending" @click="createOrder(); payed = true" color="primary" label="Оплата"  />
           <q-btn
             flat
             @click="step = 2"
@@ -92,13 +92,6 @@
             label="Назад"
             class="q-ml-sm"
           />
-        </q-stepper-navigation>
-      </q-step>
-      <q-step :name="4" title="Ожидание выполнения" icon="timer" active-icon="timer" :done="step > 3">
-        Ваш заказ принят. Наши специалисты уже принялись за работу.
-
-        <q-stepper-navigation>
-          <q-btn color="primary" label="На главную" />
         </q-stepper-navigation>
       </q-step>
     </q-stepper>
@@ -184,7 +177,8 @@ export default {
           code: 'de',
           price: 30
         }
-      ]
+      ],
+      isSending: false
     }
   },
   methods: {
@@ -209,6 +203,24 @@ export default {
       } else {
         this.filesUploaded()
       }
+    },
+    createOrder: function () {
+      this.isSending = true
+      console.log('start sending')
+      this.$store.dispatch('order/create', {
+        languageFrom: this.languageFrom.code,
+        languageTo: this.languageTo.code,
+        pages: this.pages,
+        filePackageOriginals: this.currentFilePack.remoteId
+      })
+        .then(value => {
+          this.$router.push({ name: 'viewOrder', params: { id: value.payload.uuid } })
+        })
+        .catch(e => {
+          console.error(e)
+        }).finally(e => {
+          this.isSending = false
+        })
     }
   }
 }

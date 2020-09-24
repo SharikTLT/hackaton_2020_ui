@@ -27,7 +27,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/App.vue') },
-      { path: 'order/view/:id', component: () => import('pages/App.vue') },
+      { name: 'viewOrder', path: 'order/view/:id', component: () => import('pages/ViewOrder.vue') },
       { path: 'order/create', component: () => import('pages/CreateOrder.vue') }
     ],
     meta: {

@@ -44,6 +44,7 @@ export default async ({ router, Vue, redirect, store }) => {
           case 401:
             break
           case 403:
+            localStorage.removeItem('apiToken')
             router.replace({
               path: '/login',
               query: { redirect: router.currentRoute.fullPath }
@@ -65,4 +66,15 @@ export default async ({ router, Vue, redirect, store }) => {
       }
     }
   )
+  api.promise = function (path, params) {
+    return new Promise((resolve, reject) => {
+      api.post(path, params)
+        .then(res => {
+          resolve(res.data)
+        })
+        .catch(e => {
+          reject(e)
+        })
+    })
+  }
 }

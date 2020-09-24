@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 // import example from './module-example'
 import client from './client'
 import attachment from './attachment'
+import order from './order'
 
 Vue.use(Vuex)
 
@@ -20,7 +21,8 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       client,
-      attachment
+      attachment,
+      order
     },
 
     // enable strict mode (adds overhead!)
