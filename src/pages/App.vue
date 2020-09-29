@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <!-- content -->
-    <q-skeleton height="200px" type="squar" v-if="modules.length == 0"/>
+    <q-skeleton height="200px" type="rect" v-if="modules.length == 0"/>
     <div class="q-pa-md row items-start q-gutter-md">
       <div class="row">
         <CreateOrderWidget v-if="available('CREATE_ORDER')"/>

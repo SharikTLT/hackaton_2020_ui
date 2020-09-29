@@ -105,6 +105,50 @@ import BreadcrumbsTpl from 'components/BreadcrumbsTpl.vue'
 import FilesUploader from 'components/FilesUploader.vue'
 import Vue from 'vue'
 
+const initialData = function () {
+  const bus = new Vue()
+  return {
+    bus,
+    packageId: null,
+    languageFrom: {
+      title: 'Английский',
+      code: 'eng',
+      price: 50
+    },
+    languageTo: {
+      title: 'Русский',
+      code: 'rus',
+      price: 40
+    },
+    step: 1,
+    pages: 1,
+    payed: false,
+    orderLaguages: [
+      {
+        title: 'Английский',
+        code: 'eng',
+        price: 50
+      },
+      {
+        title: 'Русский',
+        code: 'rus',
+        price: 40
+      },
+      {
+        title: 'Китайский',
+        code: 'ch',
+        price: 100
+      },
+      {
+        title: 'Немецкий',
+        code: 'de',
+        price: 30
+      }
+    ],
+    isSending: false
+  }
+}
+
 export default {
   name: 'CreateOrder',
   components: {
@@ -139,49 +183,16 @@ export default {
     }
   },
   data: function () {
-    const bus = new Vue()
-    return {
-      bus,
-      packageId: null,
-      languageFrom: {
-        title: 'Английский',
-        code: 'eng',
-        price: 50
-      },
-      languageTo: {
-        title: 'Русский',
-        code: 'rus',
-        price: 40
-      },
-      step: 1,
-      pages: 1,
-      payed: false,
-      orderLaguages: [
-        {
-          title: 'Английский',
-          code: 'eng',
-          price: 50
-        },
-        {
-          title: 'Русский',
-          code: 'rus',
-          price: 40
-        },
-        {
-          title: 'Китайский',
-          code: 'ch',
-          price: 100
-        },
-        {
-          title: 'Немецкий',
-          code: 'de',
-          price: 30
-        }
-      ],
-      isSending: false
-    }
+    return initialData()
+  },
+  mounted: function () {
+    this.resetData()
   },
   methods: {
+    resetData: function () {
+      const data = initialData()
+      Object.keys(data).forEach(k => { this[k] = data[k] })
+    },
     selectLanguageFrom: function (code) {
       this.languageFrom = code
     },
@@ -214,6 +225,7 @@ export default {
         filePackageOriginals: this.currentFilePack.remoteId
       })
         .then(value => {
+          this.$store.commit('attachment/resetCurrentPackage')
           this.$router.push({ name: 'viewOrder', params: { id: value.payload.uuid } })
         })
         .catch(e => {

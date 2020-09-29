@@ -11,3 +11,13 @@ export function create (context, payload) {
 export function view (context, payload) {
   return window.$$store.$api.promise('order/view/' + payload.id)
 }
+
+export function getMyOrdersLight ({ commit }, payload) {
+  window.$$store.$api.post('order/getMyOrders', {
+    offset: 0,
+    max: 5
+  })
+    .then(res => {
+      commit('appendOrders', res.data.payload)
+    })
+}

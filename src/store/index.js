@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import client from './client'
 import attachment from './attachment'
 import order from './order'
+import myOrder from './myOrder'
 
 Vue.use(Vuex)
 
@@ -22,7 +23,8 @@ export default function (/* { ssrContext } */) {
     modules: {
       client,
       attachment,
-      order
+      order,
+      myOrder
     },
 
     // enable strict mode (adds overhead!)

@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 
-const saved = {
+export const initialData = {
   id: uuidv4(),
   remoteId: null,
   state: 'init',
@@ -8,12 +8,12 @@ const saved = {
 }
 
 const data = {
-  currentPackage: saved,
+  currentPackage: initialData,
   packages: {
 
   }
 }
-data.packages[saved.id] = saved
+data.packages[initialData.id] = initialData
 
 export default function () {
   return data
